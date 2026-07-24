@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Namibia 2026 — Reise-Dashboard</title>
+<style>
+  :root{
+    --sand:#f5efe3; --sand2:#ede3cf; --card:#fffdf8; --ink:#3a2f25; --ink2:#6b5d4d;
+    --terra:#c1622f; --terra2:#a34e22; --olive:#6f7d45; --gold:#c99a3c;
+    --ok:#3e7d4c; --warn:#b3701f; --alert:#b0402f; --line:#dfd3ba;
+    --shadow:0 2px 10px rgba(90,70,40,.10);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --sand:#221c14; --sand2:#2b2419; --card:#2e271c; --ink:#efe6d6; --ink2:#bfae95;
+      --terra:#e08a55; --terra2:#eda06e; --olive:#a9b877; --gold:#d9b05e;
+      --ok:#7dbd8a; --warn:#dfa04f; --alert:#e07a68; --line:#4a3f2e;
+      --shadow:0 2px 10px rgba(0,0,0,.35);
+    }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Segoe UI",Ubuntu,Cantarell,"Noto Sans",sans-serif;background:var(--sand);color:var(--ink);line-height:1.5}
+  header.hero{background:linear-gradient(160deg,var(--terra) 0%,var(--terra2) 55%,#7a3a18 100%);color:#fff7ec;padding:34px 20px 26px;text-align:center}
+  header.hero h1{margin:0;font-size:2rem;letter-spacing:.5px}
+  header.hero .sub{opacity:.92;margin-top:6px;font-size:1.05rem}
+  header.hero .count{margin-top:12px;font-size:1.15rem;font-weight:600;background:rgba(255,255,255,.15);display:inline-block;padding:6px 16px;border-radius:20px}
+  nav{position:sticky;top:0;z-index:10;background:var(--card);box-shadow:var(--shadow);display:flex;flex-wrap:wrap;justify-content:center;gap:2px;padding:6px}
+  nav a{color:var(--ink);text-decoration:none;padding:7px 13px;border-radius:8px;font-size:.95rem;font-weight:600}
+  nav a:hover{background:var(--sand2)}
+  main{max-width:1080px;margin:0 auto;padding:18px 14px 60px}
+  section{margin-top:34px}
+  h2{color:var(--terra);border-bottom:3px solid var(--gold);padding-bottom:6px;font-size:1.5rem}
+  h3{margin:.4em 0 .3em;font-size:1.08rem}
+  .grid{display:grid;gap:14px}
+  .grid.c3{grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;box-shadow:var(--shadow)}
+  .badge{display:inline-block;padding:2px 10px;border-radius:12px;font-size:.78rem;font-weight:700;color:#fff;vertical-align:middle}
+  .b-ok{background:var(--ok)} .b-warn{background:var(--warn)} .b-alert{background:var(--alert)} .b-info{background:var(--olive)}
+  table{width:100%;border-collapse:collapse;font-size:.93rem}
+  th,td{padding:7px 9px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  th{background:var(--sand2);font-size:.85rem;text-transform:uppercase;letter-spacing:.4px}
+  tr:last-child td{border-bottom:none}
+  .num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+  .tw{overflow-x:auto}
+  .muted{color:var(--ink2);font-size:.88rem}
+  .stop{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--olive);border-radius:12px;margin-top:14px;box-shadow:var(--shadow)}
+  .stop.attn{border-left-color:var(--warn)}
+  .stop-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 14px;padding:12px 16px 4px}
+  .stop-head .no{background:var(--terra);color:#fff;border-radius:50%;width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center;font-weight:700;flex:none}
+  .stop-head h3{margin:0;font-size:1.15rem}
+  .stop-head .dates{color:var(--ink2);font-weight:600}
+  .stop-body{padding:2px 16px 12px 60px}
+  .kv{display:grid;grid-template-columns:max-content 1fr;gap:3px 14px;font-size:.93rem;margin:6px 0}
+  .kv b{color:var(--ink2);font-weight:600;white-space:nowrap}
+  .drive{margin:16px 0 0 26px;color:var(--ink2);font-size:.9rem;font-weight:600}
+  details{margin-top:6px}
+  summary{cursor:pointer;font-weight:600;color:var(--terra)}
+  .mono{font-family:Consolas,"DejaVu Sans Mono",monospace;font-size:.9em}
+  ul.tight{margin:6px 0;padding-left:20px} ul.tight li{margin:3px 0}
+  .totalrow td{font-weight:700;background:var(--sand2)}
+  .footer{margin-top:50px;text-align:center;color:var(--ink2);font-size:.85rem}
+  @media(max-width:640px){ .stop-body{padding-left:16px} .kv{grid-template-columns:1fr} .kv b{margin-top:4px} }
+  @media print{ nav{display:none} body{background:#fff} .card,.stop{box-shadow:none} }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <h1>🦒 Namibia 2026</h1>
+  <div class="sub">17. August – 7. September 2026 · 21 Nächte · Löwe · Kudu · Kind 1 · Kind 2 · Jaguar</div>
+  <div class="count" id="countdown"></div>
+</header>
+
+<nav>
+  <a href="#route">Route</a>
+  <a href="#fluege">Flüge</a>
+  <a href="#auto">Mietwagen</a>
+  <a href="#kosten">Kosten</a>
+  <a href="#vorbereitung">Termine &amp; Vorbereitung</a>
+  <a href="#einreise">Einreise</a>
+  <a href="#kontakte">Notfall &amp; Kontakte</a>
+</nav>
+
+<main>
+
+<!-- ══════════ ROUTE ══════════ -->
+<section id="route">
+  <h2>🗺️ Route &amp; Unterkünfte</h2>
+  <p class="muted">10 Stationen, ~2.360 km. EUR-Werte ≈ Booking-Schätzung; gezahlt wird in NAD zum Tageskurs. Alle Unterkünfte: kostenlose Parkplätze.</p>
+
+  <div class="stop">
+    <div class="stop-head"><span class="no">1</span><h3>Hohewarte Guestfarm</h3><span class="dates">Mo 17.08. → Di 18.08. · 1 Nacht · Windhoek</span><span class="badge b-ok">Alles geklärt</span></div>
+    <div class="stop-body">
+      <div class="kv">
+        <b>Zimmer</b><span>Familienzimmer (2 Erw. + 2 Kinder) + Deluxe-DZ (Jaguar) · Frühstück inkl.</span>
+        <b>Preis</b><span><strong>NAD 8.500</strong> (~458 €) + Shuttle 2 × NAD 1.000 = <strong>NAD 10.500 vor Ort</strong> (Visa/MC/Maestro)</span>
+        <b>Shuttle</b><span>✅ Gebucht (Chat 28.01.): Abholung Flughafen nach Landung 19:40 + Rückfahrt 18.08. früh zur Mietwagen-Übernahme 9:30</span>
+        <b>Check-in</b><span>14:00–18:00 (späte Ankunft via Shuttle abgesprochen)</span>
+        <b>Kontakt</b><span>+264 81 260 8400 · GPS S22°38.603 E17°24.861 (an der C23)</span>
+        <b>Booking</b><span class="mono">—</span>
+      </div>
+    </div>
+  </div>
+  <div class="drive">▼ 🚙 2:36 h · 244 km (B1 → Kalkrand → C21 Gravel ~41 km → D1268 6,5 km)</div>
+
+  <div class="stop">
+    <div class="stop-head"><span class="no">2</span><h3>Jansen Kalahari Guest Farm</h3><span class="dates">Di 18.08. → Do 20.08. · 2 Nächte · Hoachanas / Kalahari</span><span class="badge b-ok">50 % angezahlt ✓</span></div>
+    <div class="stop-body">
+      <div class="kv">
+        <b>Zimmer</b><span>2 Ferienhäuser (Küche, AC, Grill) · Frühstück inkl.</span>
+        <b>Preis</b><span><strong>NAD 11.220</strong> (~605 €)</span>
+        <b>Zahlung</b><span>✅ <strong>50 % Anzahlung (NAD 5.610) bezahlt 19.07.</strong> via NightsBridge-Link (Visa, auf Abrechnung: „NightsBridge Pay") · <strong>Rest NAD 5.610 vor Ort</strong></span>
+        <b>Essen</b><span>Kein Mittagessen (nur Toasts). Dinner-Set NAD 380 p. P. — bewusst nicht bestellt, später zubuchbar (vorbestellen!)</span>
+        <b>Sundowner</b><span>NAD 400 p. P. (Snacks + Getränk, 16:00, stehend auf Pickup) — für 5 Pers. angefragt, Bestätigung offen</span>
+        <b>Vor Ort</b><span>Wanderwege, Giraffen/Oryx/Zebras · WLAN unzuverlässig</span>
+        <b>Kontakt</b><span>Louise Jansen · +264 81 372 5147 (auch WhatsApp) · GPS S23°59.941 E017°57.434</span>
+        <b>Booking</b><span class="mono">Check-in 14:00–19:00 · Storno frei bis 03.08.</span>
+      </div>
+    </div>
+  </div>
+  <div class="drive">▼ 🚙 4:05 h · 293 km</div>
+
+  <div class="stop">
+    <div class="stop-head"><span class="no">3</span><h3>Namib Desert Camping2Go <span class="muted">(Gondwana)</span></h3><span class="dates">Do 20.08. → Sa 22.08. · 2 Nächte · 35 km südl. Solitaire</span><span class="badge b-info">Aktivitäten offen</span></div>
+    <div class="stop-body">
+      <div class="kv">
+        <b>Zimmer</b><span>2 feste Safari-Zelte (je 4 Betten, eigenes Bad, Kitchenette, Grill) · Selbstversorger</span>
+        <b>Preis</b><span><strong>NAD 10.638</strong> (~573 €) · Visa/MC (Vorauszahlung kann noch angefordert werden)</span>
+        <b>Essen</b><span>Restaurant der Namib Desert Lodge nutzbar: Dinner-Buffet 19–21 Uhr (<strong>Tisch beim Check-in reservieren</strong>) · Takeaway/BBQ-Packs</span>
+        <b>Merken</b><span>Kein Internet · Taschenlampe für Weg Zelt↔Lodge · Zelte-nebeneinander beim Check-in re-confirmen · Check-out ab 6:00 möglich</span>
+        <b>Kontakt</b><span>+264 61 427 271/224 · afterhours WhatsApp +264 81 166 8050 · GPS S24°7.370 E15°54.493</span>
+        <b>Booking</b><span class="mono">Check-in 14:00–18:00 · Storno frei bis 20.07.</span>
+      </div>
+      <details><summary>Aktivitäten-Preise (Entscheidung vertagt)</summary>
+        <div class="tw"><table>
+          <tr><th>Aktivität</th><th class="num">p. P.</th><th class="num">5 Pers.</th><th>Info</th></tr>
+          <tr><td>Sossusvlei-Excursion (½ Tag, geführt)</td><td class="num">N$ 3.020</td><td class="num">N$ 15.100 (~815 €)</td><td>1 h vor Sonnenaufgang, inkl. Brunch + Parkeintritt — <b>Vorbuchung Pflicht</b> (Mo–Fr!)</td></tr>
+          <tr><td>Sundowner Dune Drive</td><td class="num">N$ 910</td><td class="num">N$ 4.550 (~245 €)</td><td>±2 h, Snacks + Getränk, min. 4 Pers.</td></tr>
+          <tr><td>Morning Dune Drive</td><td class="num">N$ 755</td><td class="num">N$ 3.775 (~205 €)</td><td>30 min vor Sonnenaufgang, Tee/Kaffee</td></tr>
+          <tr><td>Desert Night Walk (UV-Skorpione)</td><td class="num">N$ 290</td><td class="num">N$ 1.450 (~80 €)</td><td>±45 min nach Dinner — <b>nur vor Ort buchbar</b></td></tr>
+          <tr><td>Wanderwege</td><td class="num">frei</td><td class="num">—</td><td>Karte an der Rezeption</td></tr>
+        </table></div>
+        <p class="muted">Alternative Sossusvlei: Selbstfahrt im eigenen 4x4 (Parkeintritt separat, deutlich günstiger; Gate öffnet zum Sonnenaufgang).</p>
+      </details>
+    </div>
+  </div>
+  <div class="drive">▼ 🚙 3:50 h · 281 km</div>
+
+  <div class="stop">
+    <div class="stop-head"><span class="no">4</span><h3>Ocean Dream Dolphin View</h3><span class="dates">Sa 22.08. → Di 25.08. · 3 Nächte · Swakopmund</span><span class="badge b-ok">Pre-Check-in ✓</span></div>
+    <div class="stop-body">
+      <div class="kv">
+        <b>Zimmer</b><span>Ferienhaus 3 SZ (alle 5) · Meerblick, Waschmaschine, Spülmaschine, Netflix · Selbstversorger</span>
+        <b>Preis</b><span><strong>NAD 6.300</strong> (~340 €) — <strong>✅ 50 % angezahlt (NAD 3.136,65) am 23.07. via DPO Pay</strong>; Rest ~NAD 3.163 offen (Fälligkeit bei Elsa klären, evtl. Auto-Abbuchung ~08.08.)</span>
+        <b>Status</b><span>Pre-Check-in erledigt (04.06.) · ruhiges Wohnviertel, keine Partys</span>
+        <b>Tipp</b><span>🧺 Wäsche-Stopp! · Touren Walvis Bay (Dolphin Cruise, Sandwich Harbour) über Gastgeberin <strong>Elsa Greeff</strong> buchbar (iVenture, gute Raten)</span>
+        <b>Kontakt</b><span>+264 81 381 2390 · 445 Kuiseb Avenue, Unit 43 · GPS S22°49.500 E14°32.593</span>
+        <b>Booking</b><span class="mono">Check-in 15:00–20:00 · Storno frei bis 07.08.</span>
+      </div>
+    </div>
+  </div>
+  <div class="drive">▼ 🚙 3:07 h · 271 km</div>
+
+  <div class="stop">
+    <div class="stop-head"><span class="no">5</span><h3>Otjohotozu Guestfarm</h3><span class="dates">Di 25.08. → Do 27.08. · 2 Nächte · Omaruru / Erongo</span><span class="badge b-ok">Halbpension</span></div>
+    <div class="stop-body">
+      <div class="kv">
+        <b>Zimmer</b><span>Haus 2 SZ (ihr 4) + Deluxe-DZ (Jaguar) · <strong>Frühstück + Abendessen inklusive</strong></span>
+        <b>Preis</b><span><strong>NAD 16.480</strong> (~888 €) · vor Ort (Visa/MC/Maestro), keine Vorauszahlung</span>
+        <b>Optional</b><span>Sundowner Drive — spontan vor Ort zahlen</span>
+        <b>Kontakt</b><span>+49 176 70697153 (deutschsprachig) · GPS S21°27.824 E15°49.702</span>
+        <b>Booking</b><span class="mono">Check-in 15:00–19:00 · Storno frei bis 10.08.</span>
+      </div>
+    </div>
+  </div>
+  <div class="drive">▼ 🚙 2:30 h · 206 km</div>
+
+  <div class="stop">
+    <div class="stop-head"><span class="no">6</span><h3>Big Cats Namibia Farmstays</h3><span class="dates">Do 27.08. → Sa 29.08. · 2 Nächte · Outjo / Damaraland</span><span class="badge b-ok">Halbpension</span></div>
+    <div class="stop-body">
+      <div class="kv">
+        <b>Zimmer</b><span>1 Haus 3 SZ (alle 5) · privater Pool, Kamin, Kinderhochstuhl · <strong>Frühstück + Abendessen inklusive</strong></span>
+        <b>Preis</b><span><strong>NAD 10.062,40</strong> (~542 €) · vor Ort (fast alle Karten), keine Vorauszahlung</span>
+        <b>Optional</b><span>Raubkatzen-Aktivitäten spontan vor Ort</span>
+        <b>Kontakt</b><span>+264 81 445 5107 · Farm Woodholme 202 · GPS S20°5.355 E16°29.580</span>
+        <b>Booking</b><span class="mono">Check-in 15:00–21:00 · Storno frei bis 25.08. (danach nur 50 %)</span>
+      </div>
+    </div>
+  </div>
+  <div class="drive">▼ 🚙 1:20 h · 113 km</div>
+
+  <div class="stop">
+    <div class="stop-head"><span class="no">7</span><h3>Toshari Lodge</h3><span class="dates">Sa 29.08. → Mo 31.08. · 2 Nächte · Etosha Süd (Okaukuejo ~25 km)</span><span class="badge b-ok">Etosha-Basis</span></div>
+    <div class="stop-body">
+      <div class="kv">
+        <b>Zimmer</b><span>Familienzimmer (4 Einzelbetten) + Zweibettzimmer (Jaguar) · Frühstück inkl. · AC</span>
+        <b>Preis</b><span><strong>NAD 14.079</strong> (~759 €) · vor Ort (Visa/MC), keine Vorauszahlung</span>
+        <b>Merken</b><span>Kein Internet · ideale Basis für Etosha-Pirschfahrten im eigenen Auto</span>
+        <b>Kontakt</b><span>+264 81 382 2655 · GPS S19°33.407 E15°52.619</span>
+        <b>Booking</b><span class="mono">Check-in 14:00–20:00 · Storno frei bis 21.08.</span>
+      </div>
+    </div>
+  </div>
+  <div class="drive">▼ 🚙 4:45 h · 289 km — quer durch Etosha via Fort Namutoni (Gate-Öffnungszeiten beachten!)</div>
+
+  <div class="stop">
+    <div class="stop-head"><span class="no">8</span><h3>Tamboti Farm Self-Catering</h3><span class="dates">Mo 31.08. → Do 03.09. · 3 Nächte · Tsumeb / Etosha Ost</span><span class="badge b-ok">Bezahlt ✓</span></div>
+    <div class="stop-body">
+      <div class="kv">
+        <b>Zimmer</b><span>2 Apartments mit Vollküche · Selbstversorger · Pool ganzjährig offen (Wasser kalt 🥶)</span>
+        <b>Preis</b><span><strong>NAD 9.450</strong> (~509 €) — ✅ <strong>bezahlt 04.03.2026</strong> (Yoco, R 9.500, Revolut-Karte „Tamboti")</span>
+        <b>Check-in</b><span>Foto-ID + Kreditkarte vorzeigen · 14:00–21:00</span>
+        <b>Kontakt</b><span>Andre &amp; Zelda · +264 81 143 3967 · D3007 Farm Tamboti · GPS S19°7.105 E17°37.545</span>
+        <b>Booking</b><span class="mono">Yoco-Beleg (intern)</span>
+      </div>
+    </div>
+  </div>
+  <div class="drive">▼ 🚙 2:03 h · 206 km</div>
+
+  <div class="stop">
+    <div class="stop-head"><span class="no">9</span><h3>Kamaku Guesthouse cc</h3><span class="dates">Do 03.09. → Sa 05.09. · 2 Nächte · Otjiwarongo</span><span class="badge b-ok">Alles geklärt</span></div>
+    <div class="stop-body">
+      <div class="kv">
+        <b>Zimmer</b><span>Familienzimmer 85 m² (<strong>2 Doppelbetten</strong> — per Foto verifiziert) + Zweibettzimmer (Jaguar) · Frühstück inkl. · AC</span>
+        <b>Preis</b><span><strong>NAD 4.620</strong> (~249 €) · Visa/MC</span>
+        <b>Zahlung</b><span>✅ Geklärt (Chat 15.07.): <strong>Zahlung erst beim Check-out</strong> — keine Vorauszahlung nötig</span>
+        <b>Ausflug</b><span>Waterberg Plateau möglich (Tag dazwischen)</span>
+        <b>Kontakt</b><span>+264 81 656 2920 · 11 Anderson Street · GPS S20°28.662 E16°39.096</span>
+        <b>Booking</b><span class="mono">Check-in 14:00–22:00 · Storno frei bis 30.08.</span>
+      </div>
+    </div>
+  </div>
+  <div class="drive">▼ 🚙 2:30 h · 254 km</div>
+
+  <div class="stop">
+    <div class="stop-head"><span class="no">10</span><h3>Arebbusch Travel Lodge</h3><span class="dates">Sa 05.09. → Mo 07.09. · 2 Nächte · Windhoek</span><span class="badge b-ok">Bezahlt ✓</span></div>
+    <div class="stop-body">
+      <div class="kv">
+        <b>Zimmer</b><span>Luxury Cottage 1 (bis 6 Pers., alle 5) · Küche, Waschmaschine + Trockner, Netflix · Selbstversorger</span>
+        <b>Preis</b><span><strong>NAD 7.435</strong> (~401 €) · 2 Nächte à NAD 3.717,50</span>
+        <b>Zahlung</b><span>✅ Buchung bestätigt (WhatsApp 18.07., Referenz: siehe Original-Unterlage) — ✅ <strong>bezahlt 19.07.2026</strong> (Banküberweisung)</span>
+        <b>Vor Ort</b><span>WLAN 500 MB/Tag gratis (Voucher beim Check-in) · striktes Rauchverbot (N$ 1.000 Strafe) · Ruhezone, keine Besucher an der Unit</span>
+        <b>Abreise</b><span>Mo 07.09.: Auto bis 20:30 zurück (vorher am Flughafen tanken!), Abflug 21:40</span>
+        <b>Kontakt</b><span>+264 61 252 255 · reservations@arebbusch.com · Ecke Golf &amp; Auas Road, Olympia</span>
+        <b>Booking</b><span class="mono">Check-in ab 14:00 · Storno frei bis 21.08.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ FLÜGE ══════════ -->
+<section id="fluege">
+  <h2>✈️ Flüge (Edelweiss)</h2>
+  <div class="grid c3">
+    <div class="card">
+      <h3>Hinflug — Mo 17.08.2026</h3>
+      <p><strong>WK82</strong> · Zürich (ZRH) <strong>10:10</strong> → Windhoek (WDH) <strong>19:40</strong> · Economy</p>
+      <p class="muted">Sitze: Kudu 29C · Löwe 30C · Kind 2 29A · Kind 1 29B · Jaguar 30B</p>
+    </div>
+    <div class="card">
+      <h3>Rückflug — Mo 07.09.2026</h3>
+      <p><strong>WK83</strong> · WDH <strong>21:40</strong> → ZRH <strong>07:35 (+1)</strong>, Ankunft Di 08.09. · Economy</p>
+      <p class="muted">Sitze: Kudu 29C · Löwe 30C · Kind 2 29B · Kind 1 29A · Jaguar 30B</p>
+    </div>
+    <div class="card">
+      <h3>Buchungen</h3>
+      <p>Familie (4 Pers.): 4.298,60 € (Visa)<br>
+      Jaguar: 1.421,15 € (MasterCard)<br><span class="muted">Buchungscodes: siehe Flug-PDFs (Nextcloud)</span></p>
+      <p class="muted">Kindermenü für Kind 1 &amp; Kind 2 bestellt</p>
+    </div>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <h3>Gepäck pro Person</h3>
+    <ul class="tight">
+      <li>8 kg Handgepäck + persönlicher Gegenstand</li>
+      <li>23 kg Freigepäck + 23 kg Sportgepäck (max. 158 cm / 32 kg pro Stück)</li>
+      <li>Familie zusätzlich: 2 × Autositz/Kinderwagen frei</li>
+    </ul>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <h3>🅿️ Parken Flughafen Zürich — P6</h3>
+    <p>Einfahrt <strong>17.08. 06:00</strong> · Ausfahrt <strong>08.09. 10:00</strong> · <strong>CHF 458.20</strong> (bezahlt, inkl. Stornoschutz)</p>
+    <p class="muted">⚠️ Kein Ticket an der Schranke ziehen — <strong>QR-Code aus der PDF/Mail ist das Ticket</strong> (vorher ins Handy-Wallet!). Kennzeichen + Buchungsreferenz: siehe Parkbeleg-PDF</p>
+  </div>
+</section>
+
+<!-- ══════════ MIETWAGEN ══════════ -->
+<section id="auto">
+  <h2>🚙 Mietwagen (Europcar via DERTOUR/Check24)</h2>
+  <div class="grid c3">
+    <div class="card">
+      <h3>Fahrzeug &amp; Zeitraum</h3>
+      <p><strong>Toyota Fortuner o. ä.</strong> (FFBD) · 4x4 · Automatik · 5 Sitze · 3 Koffer</p>
+      <p>Abholung: <strong>Di 18.08., 9:30</strong><br>Rückgabe: <strong>Mo 07.09., 20:30</strong><br>beides Windhoek Hosea Kutako Airport</p>
+      <p><strong>1.541,30 € — bezahlt (prepaid)</strong> · unbegrenzte km</p>
+    </div>
+    <div class="card">
+      <h3>Versicherung</h3>
+      <ul class="tight">
+        <li>Vollkasko + Diebstahl <strong>ohne Selbstbeteiligung</strong></li>
+        <li>Glas / Reifen / Unterboden / Dach inklusive</li>
+        <li>Haftpflicht 75 Mio. €</li>
+        <li>❌ Keine Super-CDW vor Ort dazukaufen (nicht erstattbar)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Bei Übernahme</h3>
+      <ul class="tight">
+        <li><strong>Kaution NAD 1.500</strong> — nur echte Kreditkarte auf <strong>Löwe</strong> (keine Debit-/Prepaid-/virtuellen Karten!)</li>
+        <li><strong>Internationaler Führerschein Pflicht</strong> + nationaler (liegt vor ✓)</li>
+        <li>Alle Zusatzfahrer kostenlos — vor Ort mit Originalpapieren eintragen</li>
+      </ul>
+    </div>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <h3>Merkzettel</h3>
+    <ul class="tight">
+      <li>Tankregelung „Fair": mit gleichem Füllstand zurückgeben — <strong>final am Flughafen tanken</strong>, nicht in der Stadt</li>
+      <li>Online-Check-in: <span class="mono">wl.europcar.co.za/ready2go</span> (Originale trotzdem mitnehmen)</li>
+      <li>Kein Grenzübertritt geplant · Kindersitze: eigene im Fluggepäck (vor Ort N$ 550/Miete)</li>
+      <li>Referenzen (Check24/Europcar): siehe Voucher (Nextcloud)</li>
+      <li>24h-Notfall DERTOUR: <strong>+49 69 9588 6400</strong></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ══════════ KOSTEN ══════════ -->
+<section id="kosten">
+  <h2>💰 Kosten</h2>
+  <div class="card">
+    <h3>Gesamtübersicht</h3>
+    <div class="tw"><table>
+      <tr><th>Posten</th><th class="num">Betrag</th><th>Status</th></tr>
+      <tr><td>Flüge (5 Personen)</td><td class="num">5.719,75 €</td><td><span class="badge b-ok">bezahlt</span></td></tr>
+      <tr><td>Mietwagen 21 Tage</td><td class="num">1.541,30 €</td><td><span class="badge b-ok">bezahlt</span></td></tr>
+      <tr><td>Parken Zürich P6</td><td class="num">CHF 458.20</td><td><span class="badge b-ok">bezahlt</span></td></tr>
+      <tr><td>e-Visa (3 Erw. + 2 Kinder)</td><td class="num">N$ 6.400 (~346 €)</td><td><span class="badge b-ok">bezahlt</span></td></tr>
+      <tr><td>Unterkünfte (10 Stationen, Booking-Werte)</td><td class="num">5.324 € / N$ ~98.784</td><td><span class="badge b-ok">Tamboti ✓ · Jansen 50 % ✓ · Arebbusch ✓</span></td></tr>
+      <tr><td>Hohewarte-Shuttle (2 Fahrten)</td><td class="num">N$ 2.000 (~108 €)</td><td><span class="badge b-info">vor Ort</span></td></tr>
+      <tr class="totalrow"><td>Summe (grob, ohne Aktivitäten/Essen/Sprit)</td><td class="num">≈ 13.470 €</td><td></td></tr>
+    </table></div>
+    <p class="muted">Hinweis: Für die Unterkünfte kursieren drei Summen — Booking-Übersicht 5.324 €, kosten.md 5.186 €, Routenplan-Aufteilung 4.850,15 € (interner Stand). Noch zu konsolidieren. Kurs ≈ 18,5 NAD/€.</p>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <h3>Aufteilung: Familie (LK) vs. Jaguar</h3>
+    <div class="tw"><table>
+      <tr><th>Posten</th><th class="num">LK (Familie)</th><th class="num">Jaguar</th></tr>
+      <tr><td>Flüge</td><td class="num">4.298,60 €</td><td class="num">1.421,15 €</td></tr>
+      <tr><td>Unterkünfte (lt. Routenplan-Aufteilung)</td><td class="num">3.079,58 €</td><td class="num">1.770,58 €</td></tr>
+      <tr><td>e-Visa</td><td class="num">N$ 4.800 (~259 €)</td><td class="num">N$ 1.600 (~86 €)</td></tr>
+      <tr><td>Mietwagen + Parken ZRH (2/3 LK · 1/3 Jaguar)</td><td class="num">1.027,53 € + CHF 305.47</td><td class="num">513,77 € + CHF 152.73</td></tr>
+      <tr class="totalrow"><td>Summe (grob)</td><td class="num">≈ 8.970 €</td><td class="num">≈ 3.944 €</td></tr>
+    </table></div>
+    <p class="muted">Unterkunfts-Aufteilung aus „Routenplanung Namibia 2026.xlsx" (Spalten Preis LK / Preis Jaguar) — Stand älter als Booking-Werte. Mietwagen + Parken ZRH: Aufteilung 2/3 LK · 1/3 Jaguar (Nutzerentscheidung 21.07.2026).</p>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <details><summary>Unterkünfte einzeln (Booking-Werte)</summary>
+      <div class="tw"><table>
+        <tr><th>#</th><th>Unterkunft</th><th class="num">NAD</th><th class="num">≈ EUR</th><th>Zahlung</th></tr>
+        <tr><td>1</td><td>Hohewarte</td><td class="num">8.500</td><td class="num">458</td><td>vor Ort (+ Shuttle 2.000)</td></tr>
+        <tr><td>2</td><td>Jansen Kalahari</td><td class="num">11.220</td><td class="num">605</td><td>✅ 50 % angezahlt (19.07.), Rest vor Ort</td></tr>
+        <tr><td>3</td><td>Camping2Go</td><td class="num">10.638</td><td class="num">573</td><td>Visa/MC</td></tr>
+        <tr><td>4</td><td>Ocean Dream</td><td class="num">6.300</td><td class="num">340</td><td>✅ 50 % angezahlt (23.07.), Rest offen</td></tr>
+        <tr><td>5</td><td>Otjohotozu</td><td class="num">16.480</td><td class="num">888</td><td>vor Ort</td></tr>
+        <tr><td>6</td><td>Big Cats</td><td class="num">10.062</td><td class="num">542</td><td>vor Ort</td></tr>
+        <tr><td>7</td><td>Toshari</td><td class="num">14.079</td><td class="num">759</td><td>vor Ort</td></tr>
+        <tr><td>8</td><td>Tamboti</td><td class="num">9.450</td><td class="num">509</td><td>✅ bezahlt</td></tr>
+        <tr><td>9</td><td>Kamaku</td><td class="num">4.620</td><td class="num">249</td><td>beim Check-out</td></tr>
+        <tr><td>10</td><td>Arebbusch</td><td class="num">7.435</td><td class="num">401</td><td>✅ bezahlt (19.07.)</td></tr>
+        <tr class="totalrow"><td></td><td>Summe</td><td class="num">98.784</td><td class="num">5.324</td><td></td></tr>
+      </table></div>
+    </details>
+  </div>
+</section>
+
+<!-- ══════════ TERMINE & VORBEREITUNG ══════════ -->
+<section id="vorbereitung">
+  <h2>📅 Termine &amp; Vorbereitung</h2>
+  <p class="muted">Zeitkritische Termine und alle offenen Vorbereitungsthemen an einem Ort — je Thema als ToDo-Kachel mit Status, laufend ergänzt.</p>
+
+  <div class="card">
+    <h3>⏰ Harte Termine</h3>
+    <div class="tw"><table>
+      <tr><th>Datum</th><th>Was</th></tr>
+      <tr><td>31.07. / 03.08. / 07.08. / 10.08.</td><td>Stornofristen enden (Tamboti / Jansen / Ocean Dream / Otjohotozu)</td></tr>
+      <tr><td><strong>~08.08.</strong></td><td>Ocean Dream: Restzahlung ~50 % offen (50 % bereits am 23.07. angezahlt) — Fälligkeit/Weg bei Elsa klären</td></tr>
+      <tr><td>21.08. / 25.08. / 30.08.</td><td>Stornofristen Toshari &amp; Arebbusch / Big Cats / Kamaku</td></tr>
+    </table></div>
+  </div>
+
+  <div class="stop attn">
+    <div class="stop-head"><span class="no">📍</span><h3>Navigation &amp; Offline-Karten</h3><span class="badge b-warn">In Bearbeitung</span></div>
+    <div class="stop-body">
+      <div class="kv">
+        <b>Problem</b><span>Camps waren mit reinem Google Maps online bisher schwer zu finden</span>
+        <b>Empfehlung</b><span><strong>Tracks4Africa Guide App</strong> (Android + iOS) · Namibia-Guide ca. 9,99 USD · voll offlinefähig · ~412 Camps &amp; ~9.759 POIs in der Datenbank für Namibia</span>
+        <b>Noch zu tun</b><span>☐ App + Namibia-Guide auf Handy Löwe installieren &amp; einrichten<br>☐ App + Namibia-Guide auf Handy Kudu installieren &amp; einrichten<br>☐ Papier-Karten für Namibia besorgen<br>☐ Navi-Redundanz sicherstellen: Android + Apple + eine Lösung ohne Smartphone</span>
+        <b>Ergänzend</b><span>Google Maps weiterhin als zusätzliche Quelle nutzen, nicht ersetzen</span>
+        <b>Issue</b><span class="mono">NAM-ISSUE-0010</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="stop">
+    <div class="stop-head"><span class="no">⛽</span><h3>Diesel-Typ &amp; Tankreichweite</h3><span class="badge b-ok">Geklärt ✓</span></div>
+    <div class="stop-body">
+      <div class="kv">
+        <b>Anlass</b><span>Erfahrungsbericht eines Mitreisenden aus einer anderen Afrika-Tour: dort gab es "alten/neuen Diesel", nicht überall verfügbar, Reichweite nur ~500 km</span>
+        <b>Ergebnis</b><span>Namibia hat bereits <strong>seit Mai 2013 landesweit einheitlich 50ppm-Diesel</strong> — das geschilderte Problem tritt hier <strong>nicht</strong> auf. Kein bekanntes Risiko für unseren Mietwagen (Fortuner/FFBD)</span>
+        <b>Tankstellen</b><span>Abstände auf unserer Route bis ~350 km (z. B. Sossusvlei-Gebiet → Swakopmund, Damaraland → Etosha); 2025 vereinzelt Lieferengpässe an NWR-Camps (z. B. Sesriem)</span>
+        <b>Empfehlung</b><span>1–2× 20-l-Reservekanister mitnehmen, nie unter Halbtank fahren — unabhängig vom Diesel-Norm-Thema</span>
+        <b>Issue</b><span class="mono">NAM-ISSUE-0012</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="stop">
+    <div class="stop-head"><span class="no">🚓</span><h3>Sicherheit unterwegs — Korruption &amp; Betrug</h3><span class="badge b-ok">Geklärt ✓</span></div>
+    <div class="stop-body">
+      <div class="kv">
+        <b>Notrufnummern</b><span>Polizei <strong>10111</strong> (kostenlos, 24 h) · Anti-Corruption Commission (ACC) Namibia <strong>0800 222 888</strong> (gebührenfrei)</span>
+        <b>Bei Kontrolle</b><span>Keine offiziellen "Spot Fines" in Namibia — Papiere zeigen, ruhig bleiben, Bußgeld nur auf der Polizeistation zahlen; nie Bargeld direkt am Kontrollpunkt übergeben</span>
+        <b>Fake-Polizei</b><span>NamPol warnt aktiv vor gefälschten Polizei-SMS/-Anrufen. Echt = gekennzeichnetes Dienstfahrzeug + Uniform + Dienstausweis (zeigen lassen). Im Zweifel: Weiterfahrt zur Station anbieten oder ACC/10111 anrufen</span>
+        <b>Weitere Maschen</b><span>Vorgetäuschte Panne (Bitte um "Benzingeld"), Fake-Lodge-Buchungen/-Jobs per WhatsApp (→ nur offizielle Kanäle, s. Toshari-Warnung), Kartenbetrug (Karte nie aus der Hand geben), Autowasch-Trick Windhoek</span>
+        <b>Issue</b><span class="mono">NAM-ISSUE-0013</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="stop attn">
+    <div class="stop-head"><span class="no">💵</span><h3>Bargeldbeschaffung vorher &amp; vor Ort</h3><span class="badge b-info">Vorbereitung nötig</span></div>
+    <div class="stop-body">
+      <div class="kv">
+        <b>Währung</b><span>NAD 1:1 an ZAR gekoppelt, ZAR wird überall akzeptiert (Wechselgeld meist in NAD)</span>
+        <b>Vorab (DE/CH)</b><span>Lohnt sich <strong>nicht</strong> — weder NAD noch ZAR: ZAR-Vorab-Tausch bei dt. Wechselstuben ~20 % Aufschlag auf Interbankenkurs, ATM-Abhebung in Namibia dagegen nur ~3–7 % (Auslandseinsatzentgelt + lokale Gebühr). Ausnahme: kleiner Notgroschen (~50–100 € Gegenwert) für die ersten Stunden nach Landung sinnvoll — als Absicherung, nicht wegen des Kurses</span>
+        <b>ATM-Lage</b><span>Zuverlässig: Windhoek, Swakopmund, Otjiwarongo, Outjo · unzuverlässig: Solitaire · <strong>praktisch keine ATMs: Kalahari, Damaraland, rund um Etosha</strong> → dort auf mitgeführtes Bargeld angewiesen</span>
+        <b>Limits</b><span>Meist nur NAD 2.000–3.000 pro Abhebung → mehrere Abhebungen einplanen; zzgl. lokale + Auslandseinsatz-Gebühren (~1,5–2 %)</span>
+        <b>Karten</b><span>⚠️ Reine Prepaid-/Virtualkarten (z. B. Revolut) können an manchen Automaten Probleme machen (analog zur Mietwagen-Kaution) — <strong>jeder Erwachsene zusätzlich physische Kredit-/Debitkarte</strong> mitführen</span>
+        <b>Bedarf</b><span>Grober Puffer <strong>NAD 15.000–25.000</strong> für die 5-köpfige Gruppe über 21 Tage (zzgl. bekannter Restzahlungen wie Jansen Kalahari NAD 5.610)</span>
+        <b>Noch zu tun</b><span>☐ Bank(en) über Auslandseinsatz Namibia informieren, Limits/Gebühren erfragen<br>☐ Erste größere Abhebung gleich in Windhoek einplanen<br>☐ Vor jeder ATM-armen Etappe (Kalahari/Damaraland/Etosha) auffüllen</span>
+        <b>Issue</b><span class="mono">NAM-ISSUE-0014</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="stop attn">
+    <div class="stop-head"><span class="no">🛠️</span><h3>Fahrzeug-/Sand-Notfallausrüstung</h3><span class="badge b-info">Vorbereitung nötig</span></div>
+    <div class="stop-body">
+      <div class="kv">
+        <b>Wagenheber/Sand Ladders</b><span>Standard-Wagenheber gehört zur Mietwagen-Pflichtausstattung. Sand Ladders (Bergungsbretter) sind bei Europcar/DERTOUR <strong>meist NICHT im Standardpaket</strong> — vorab nachfragen, sonst in Windhoek bei <strong>CYMOT</strong> oder <strong>Offroad Centre 4x4</strong> besorgen/mieten</span>
+        <b>Sandschaufel</b><span>Klappbar, robustes Metallblatt (kein Plastik), ~40–60 cm, D-Handgriff — ebenfalls CYMOT/Offroad Centre</span>
+        <b>Kompressor &amp; Reifendruck</b><span>Kompressor bei 4x4-Mietwagen häufiger Standard als Sand Ladders, aber nicht garantiert — bei Übergabe prüfen. Faustregel Reifendruck: Gravel ~2,0 bar (von ~2,2), weicher Sand ~1,2–1,5 bar (15–20 PSI), auf Asphalt wieder aufpumpen</span>
+        <b>Sandfahren-Tutorial</b><span>Empfohlene Quellen: <strong>Expert Africa</strong> ("Namibia: self-drive tips and tricks"), <strong>Arrive Alive</strong> ("4x4 Sand Driving Safety"), ADAC-Namibia-Reiseseite — vor Abfahrt von allen Fahrern ansehen</span>
+        <b>Notfallregeln (Top 8)</b><span>1) Immer beim Fahrzeug bleiben · 2) Reiseroute vorher mitteilen + Check-in · 3) Genug Wasser/Proviant für 1–2 Tage · 4) Zwei Ersatzreifen mitführen · 5) Tempolimit Piste ~60–80 km/h · 6) Geladenes Handy + lokale SIM · 7) Notrufnummern griffbereit · 8) Nicht bei Dämmerung/Nachts fahren (Wildwechsel)</span>
+        <b>Kommunikation</b><span>Walkie-Talkie + Satellitentelefon werden laut Ankündigung von einem Mitreisenden mitgebracht (Zuordnung zu Codename noch offen)</span>
+        <b>Noch zu tun</b><span>☐ Bei DERTOUR/Europcar Sand Ladders/Kompressor/2. Ersatzreifen erfragen<br>☐ Fehlende Ausrüstung bei CYMOT/Offroad Centre (Windhoek) besorgen<br>☐ Sandfahren-Tutorial gemeinsam ansehen<br>☐ Notfallregeln mit der Gruppe besprechen</span>
+        <b>Issue</b><span class="mono">NAM-ISSUE-0011</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="stop attn">
+    <div class="stop-head"><span class="no">🛡️</span><h3>ADAC-Reiseversicherung Familie — EN-Bestätigung</h3><span class="badge b-warn">Blockiert</span></div>
+    <div class="stop-body">
+      <div class="kv">
+        <b>Problem</b><span>Familie (Löwe, Kudu, Kind 1, Kind 2) hat zusätzlich zur UKV eine ADAC-Auslandsreiseversicherung — die englische Bestätigung dafür fehlt noch</span>
+        <b>Status</b><span>Bei ADAC angefragt, Antwort steht aus. <strong>Kein Einreise-Blocker</strong> — UKV-EN-Bestätigung deckt die Familie für die e-Visa-Checkliste bereits ab</span>
+        <b>Noch zu tun</b><span>☐ Englische ADAC-Bestätigung (Familie) einholen<br>☐ Ablage in Nextcloud-Unterlagenordner<br>☐ Familien-ADAC-Police grundsätzlich erfassen (bisher nicht dokumentiert)<br>☐ MEMORY.MD + Einreise-Checkliste aktualisieren, sobald vorhanden</span>
+        <b>Issue</b><span class="mono">NAM-ISSUE-0006</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="stop attn">
+    <div class="stop-head"><span class="no">🏡</span><h3>Unterkünfte — offene Einzelpunkte (2. Runde)</h3><span class="badge b-info">Offen</span></div>
+    <div class="stop-body">
+      <div class="kv">
+        <b>Jansen Kalahari</b><span>☐ Klären, ob Dinner vorher angemeldet werden muss oder spontan vor Ort möglich ist<br>☐ Sundowner Drive anmelden (Aktion: Löwe)</span>
+        <b>Camping2Go</b><span>☐ Abendessen (Dinner-Buffet) anmelden (Aktion: Löwe)<br>☐ Aktivitäten entscheiden: Sossusvlei geführt (~815 €) vs. Selbstfahrt · Dune Drives · Night Walk vor Ort</span>
+        <b>Toshari Lodge</b><span>☐ Frühstück-Status klären (bisher als "inkl." dokumentiert — mit Lodge-Antwort abgleichen), ggf. dazubuchen (Aktion: Löwe)<br>☐ Zimmerwunsch (nah beieinander) + Dinner-Preisanfrage final beantwortet abwarten</span>
+        <b>Ocean Dream</b><span>Walvis-Bay-Touren (Dolphin Cruise etc.) über Gastgeberin Elsa buchbar — bei Interesse anfragen</span>
+        <b>Zur Kenntnis</b><span>Big Cats: optionale Vorauszahlung NAD 10.062,40 möglich, kein Handlungsbedarf · Arebbusch: Zahlungseingang bestätigt, Station abgeschlossen</span>
+        <b>Issue</b><span class="mono">NAM-ISSUE-0015</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <h3>📎 Sonstige offene Punkte <span class="muted">(ohne eigenes Issue)</span></h3>
+    <ul class="tight">
+      <li>Scans im Nextcloud-Unterlagenordner ablegen: Int. Führerscheine, Geburtsurkunden (beides liegt vor), Hohewarte-Shuttle-Screenshot</li>
+      <li>Kostendifferenz Unterkünfte konsolidieren (5.324 € / 5.186 € / 4.850 €)</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ══════════ EINREISE ══════════ -->
+<section id="einreise">
+  <h2>🛂 Einreise &amp; Dokumente</h2>
+  <div class="card">
+    <h3>e-Visa — alle erteilt ✅ (gültig 17.08.–15.11.2026, Multiple Entry)</h3>
+    <div class="tw"><table>
+      <tr><th>Person</th><th>Status</th><th class="num">Gebühr</th><th>Pass gültig bis</th></tr>
+      <tr><td>Löwe</td><td class="mono">✓ erteilt</td><td class="num">N$ 1.600</td><td>05.10.2031</td></tr>
+      <tr><td>Kudu</td><td class="mono">✓ erteilt</td><td class="num">N$ 1.600</td><td>01.01.2034</td></tr>
+      <tr><td>Kind 1 (*2017)</td><td class="mono">✓ erteilt</td><td class="num">N$ 800</td><td>11.01.2029</td></tr>
+      <tr><td>Kind 2 (*2018)</td><td class="mono">✓ erteilt</td><td class="num">N$ 800</td><td>11.01.2029</td></tr>
+      <tr><td>Jaguar</td><td class="mono">✓ erteilt</td><td class="num">N$ 1.600</td><td>10.06.2031</td></tr>
+    </table></div>
+    <p class="muted">Das e-Visa ist zugleich das Arrival Form — wird bei Einreise vor dem Immigration Officer unterschrieben. Einreise: Hosea Kutako Int. Airport.</p>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <h3>Mitnahme-Checkliste (pro Person, Dokumente auf Englisch)</h3>
+    <ul class="tight">
+      <li>☐ e-Visa <strong>ausgedruckt</strong></li>
+      <li>☐ Reisepass (≥ 6 Monate gültig, 3 leere Seiten — alle ✓)</li>
+      <li>☐ Rückflug-Nachweis (Edelweiss-Bestätigung)</li>
+      <li>☐ Krankenversicherungs-Nachweis auf Englisch — UKV EN (Familie) ✓ · ADAC EN (Jaguar) ✓ · <em>ADAC EN Familie fehlt noch (ADAC-Ticket offen, Stand 19.07.; für Einreise reicht UKV EN bereits)</em></li>
+      <li>☐ Unterkunftsliste (liegt als eVisa-Textliste vor)</li>
+      <li>☐ Nachweis finanzieller Mittel (Kreditkarten)</li>
+      <li>☐ Kinder: <strong>Geburtsurkunden (engl./übersetzt)</strong> + ggf. Einverständniserklärung (liegen vor ✓)</li>
+      <li>☐ Internationale + nationale Führerscheine (liegen vor ✓)</li>
+      <li>☐ Kreditkarte auf Löwe für Mietwagen-Kaution</li>
+      <li>☐ Parken-QR-Code im Wallet</li>
+      <li>☐ Taschenlampe(n), Autositze für die Kinder</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ══════════ KONTAKTE ══════════ -->
+<section id="kontakte">
+  <h2>📞 Notfall &amp; Kontakte</h2>
+  <div class="grid c3">
+    <div class="card">
+      <h3>🚑 Kranken-Notfall</h3>
+      <p><strong>UKV</strong> (Löwe, Kudu, Kind 1, Kind 2)<br><strong>+49 211 5363 158</strong> (24 h)<br><span class="muted">Deckung 17.08.–08.09., weltweit, unbegrenzt · SB 150 €/Fall, max. 300 €/Reise · Vers.-Nr.: siehe UKV-PDF</span></p>
+      <p><strong>ADAC</strong> (Jaguar)<br><strong>+49 89 76 76 76 76</strong> (24 h)<br><span class="muted">Deckung 15.08.–12.09. · Mitglieds-Nr.: siehe ADAC-PDF</span></p>
+      <p><strong>ADAC Premium</strong> (Familie, zusätzlich zur UKV)<br><strong>+49 89 76 76 76 76</strong> (24 h)<br><span class="muted">Mitglied Löwe (Nr.: siehe ADAC-PDF) · Partner + Kinder mitversichert · weltweit, erste 63 Tage der Reise</span></p>
+    </div>
+    <div class="card">
+      <h3>🚗 Auto &amp; Reise</h3>
+      <p>DERTOUR-Reisebetreuung (24 h): <strong>+49 69 9588 6400</strong><br>
+      Check24 Mietwagen: +49 89 998299543<br>
+      Booking.com (24 h): +49 69 17 07 76 582<br>
+      Gold-Karte Auto-Schutzbrief (URV): +49 211 536-3888</p>
+    </div>
+    <div class="card">
+      <h3>🏡 Unterkünfte-Schnellwahl</h3>
+      <p class="muted" style="line-height:1.8">
+        Hohewarte +264 81 260 8400<br>
+        Jansen (Louise) +264 81 372 5147<br>
+        Gondwana +264 61 427 271 · WA +264 81 166 8050<br>
+        Ocean Dream (Elsa) +264 81 381 2390<br>
+        Otjohotozu +49 176 70697153<br>
+        Big Cats +264 81 445 5107<br>
+        Toshari +264 81 382 2655<br>
+        Tamboti +264 81 143 3967<br>
+        Kamaku +264 81 656 2920<br>
+        Arebbusch +264 61 252 255
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="footer">
+  Buchungs-/Zahlungsreferenzen: nur in den Original-Unterlagen · Stand: 23.07.2026 · Quelle: Unterlagen (Nextcloud) + MEMORY.MD · Kurs ≈ 18,5 NAD/€ (Schätzung)
+</div>
+
+</main>
+
+<script>
+(function(){
+  var start = new Date(2026,7,17,10,10); // 17.08.2026 10:10 Abflug
+  var now = new Date();
+  var el = document.getElementById("countdown");
+  var diff = start - now;
+  if (diff > 0){
+    var d = Math.floor(diff/86400000);
+    el.textContent = "Noch " + d + " Tage bis zum Abflug ✈️";
+  } else if (now < new Date(2026,8,8)) {
+    el.textContent = "🇳🇦 Ihr seid unterwegs — gute Reise!";
+  } else {
+    el.textContent = "Reise beendet — welcome back!";
+  }
+})();
+</script>
+
+</body>
+</html>
